@@ -2,11 +2,6 @@
 $dsn="mysql:host=localhost;dbname=finance_db;charset=utf8";
 $pdo=new PDO($dsn,'root','');
 
-$sql="SELECT * FROM `daily_account` WHERE `id`='{$_GET['id']}'";
-$exp=$pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
-echo "<pre>";
-print_r($exp);
-echo "</pre>";
 ?>
 
 <!DOCTYPE html>
@@ -14,13 +9,13 @@ echo "</pre>";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💰 編輯消費</title>
+    <title>💰 新增消費</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <div class="form-container">
-            <h1>💰 編輯消費</h1>
+            <h1>💰 新增消費</h1>
             <form action="insert_expense.php" method="post">
                 
                 <div class="form-section">
@@ -29,11 +24,11 @@ echo "</pre>";
                     <div class="form-row">
                         <div class="form-group">
                             <label for="date">日期 (必填) *</label>
-                            <input type="date" id="date" name="date" value="<?=$exp['date'];?>" required>
+                            <input type="date" id="date" name="date" required>
                         </div>
                         <div class="form-group">
                             <label for="time">時間 (必填) *</label>
-                            <input type="time" id="time" name="time" value="<?=$exp['time'];?>" required>
+                            <input type="time" id="time" name="time" required>
                         </div>
                     </div>
 
@@ -41,23 +36,23 @@ echo "</pre>";
                         <label for="currency">幣別 (必填) *</label>
                         <div class="radio-group">
                             <div class="radio-item">
-                                <input type="radio" name="currency" id="currency_twd" value="TWD" <?=($exp['currency']=='TWD')?'checked':'';?>>
+                                <input type="radio" name="currency" id="currency_twd" value="TWD" checked>
                                 <label for="currency_twd">台幣</label>
                             </div>
                             <div class="radio-item">
-                                <input type="radio" name="currency" id="currency_usd" value="USD" <?=($exp['currency']=='USD')?'checked':'';?>>
+                                <input type="radio" name="currency" id="currency_usd" value="USD">
                                 <label for="currency_usd">美元</label>
                             </div>
                             <div class="radio-item">
-                                <input type="radio" name="currency" id="currency_aud" value="AUD" <?=($exp['currency']=='AUD')?'checked':'';?>>
+                                <input type="radio" name="currency" id="currency_aud" value="AUD">
                                 <label for="currency_aud">澳幣</label>
                             </div>
                             <div class="radio-item">
-                                <input type="radio" name="currency" id="currency_jpy" value="JPY" <?=($exp['currency']=='JPY')?'checked':'';?>>
+                                <input type="radio" name="currency" id="currency_jpy" value="JPY">
                                 <label for="currency_jpy">日圓</label>
                             </div>
                             <div class="radio-item">
-                                <input type="radio" name="currency" id="currency_cny" value="CNY" <?=($exp['currency']=='CNY')?'checked':'';?>>
+                                <input type="radio" name="currency" id="currency_cny" value="CNY">
                                 <label for="currency_cny">人民幣</label>
                             </div>
                         </div>
@@ -69,7 +64,7 @@ echo "</pre>";
                     
                     <div class="form-group">
                         <label for="item">品項 (必填) *</label>
-                        <input type="text" id="item" name="item" value="<?=$exp['item'];?>" placeholder="例：咖啡、午餐" required>
+                        <input type="text" id="item" name="item" placeholder="例：咖啡、午餐" required>
                     </div>
 
                     <div class="form-group">
@@ -78,9 +73,7 @@ echo "</pre>";
                             <option value="">-- 請選擇或輸入商店 --</option>
                             <?php $stores=$pdo->query("SELECT `id`,`store` FROM `daily_account` GROUP BY `store`")->fetchALL(PDO::FETCH_ASSOC);
                                 foreach($stores as $store){
-                                    $sel=($exp['store']==$store['store'])?'selected':'';
-
-                                    echo "<option value='{$store['store']}' $sel>{$store['store']}</option>";
+                                    echo "<option value='{$store['store']}'>{$store['store']}</option>";
                             }
                             ?>
                         </select>
